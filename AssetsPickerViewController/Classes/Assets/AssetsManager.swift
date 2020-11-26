@@ -150,7 +150,7 @@ extension AssetsManager {
                 PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: { (status) in
                     DispatchQueue.main.async {
                         switch status {
-                        case .authorized:
+                        case .authorized, .limited:
                             completion(true)
                         default:
                             completion(false)
