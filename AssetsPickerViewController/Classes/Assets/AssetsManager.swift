@@ -625,9 +625,15 @@ extension AssetsManager {
             queue.async(group: group) {
                 group.enter()
                 self.fetchAlbumsAsync(forAlbumType: type) { (albumsArrayEntry, fetchedEntry) in
-                    fetchedAlbumsArray.append(albumsArrayEntry.fetchedAlbums)
-                    sortedAlbumsArray.append(albumsArrayEntry.sortedAlbums)
-                    albumsFetchArray.append(albumsArrayEntry.fetchResult)
+                    if type == .smartAlbum {
+                        fetchedAlbumsArray.insert(albumsArrayEntry.fetchedAlbums, at: 0)
+                        sortedAlbumsArray.insert(albumsArrayEntry.sortedAlbums, at: 0)
+                        albumsFetchArray.insert(albumsArrayEntry.fetchResult, at: 0)
+                    } else {
+                        fetchedAlbumsArray.append(albumsArrayEntry.fetchedAlbums)
+                        sortedAlbumsArray.append(albumsArrayEntry.sortedAlbums)
+                        albumsFetchArray.append(albumsArrayEntry.fetchResult)
+                    }
                     
                     fetchMap = fetchMap.merging(fetchedEntry.fetchMap) { (first, second) -> PHFetchResult<PHAsset> in return first }
                     albumMap = albumMap.merging(fetchedEntry.albumMap) { (first, second) -> PHAssetCollection in return first }
